@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <ImplicitUsings>enable</ImplicitUsings>
+    <PackageIcon>icon/bri.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,6 +24,11 @@
     <PackageReference Include="Spectre.Console" Version="0.45.0" />
     <PackageReference Include="Spectre.Console.Cli" Version="0.45.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+     <None Include="../../icon/LICENSE.md" Pack="true" PackagePath="icon" />
+     <None Include="../../icon/bri.png" Pack="true" PackagePath="icon" />
   </ItemGroup>
 
 </Project>

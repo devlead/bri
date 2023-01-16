@@ -12,22 +12,28 @@ public static class JsonElementExtensions
             { ValueKind: JsonValueKind.String } => StringToBicep(element),
             { ValueKind: JsonValueKind.True } => "true",
             { ValueKind: JsonValueKind.False } => "false",
-            { ValueKind: JsonValueKind.Array } => $"[{string.Join(
-                    ", ",
-                    element.EnumerateArray().Select(value => value.ToBicep())
-                )}]",
+            { ValueKind: JsonValueKind.Array } => ArrayToBicep(element, level),
             { ValueKind: JsonValueKind.Object } => ObjectToBicep(element, level),
             { ValueKind: JsonValueKind.Number } => element.GetRawText(),
             _ => element.GetRawText()
         };
 
+    private static string ArrayToBicep(JsonElement element, int level)
+    {
+        string indent = "".PadLeft(level * 2);
+        return $"{indent}[{string.Concat(
+                            element.EnumerateArray().Select(value => $"\r\n{indent}  {value.ToBicep()}")
+                )}\r\n{indent}]";
+    }
+
     private static string StringToBicep(JsonElement element)
     {
         var elementValue = element.GetString();
-        return elementValue switch {
-            string { Length: > 2 } value when value[0]=='[' && value[^1]==']'  => value[1..^1],
-             _ => $"'{elementValue?.Trim('"')}'"
-            };
+        return elementValue switch
+        {
+            string { Length: > 2 } value when value[0] == '[' && value[^1] == ']' => value[1..^1],
+            _ => $"'{elementValue?.Trim('"')}'"
+        };
     }
 
     private static string ObjectToBicep(JsonElement element, int level)

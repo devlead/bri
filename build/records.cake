@@ -8,6 +8,7 @@ public record BuildData(
     string Version,
     bool IsMainBranch,
     bool ShouldNotPublish,
+    bool IsLocalBuild,
     DirectoryPath ProjectRoot,
     DotNetMSBuildSettings MSBuildSettings,
     DirectoryPath ArtifactsPath,
@@ -38,6 +39,33 @@ public record BuildData(
         OutputPath,
         OutputPath.Combine(IntegrationTest)
     };
+
+    public AzureCredentials AzureCredentials { get; } = new AzureCredentials(
+                                                            System.Environment.GetEnvironmentVariable("AZURE_TENANT_ID"),
+                                                            System.Environment.GetEnvironmentVariable("AZURE_CLIENT_ID"),
+                                                            System.Environment.GetEnvironmentVariable("AZURE_CLIENT_SECRET"),
+                                                            System.Environment.GetEnvironmentVariable("AZURE_AUTHORITY_HOST")
+                                                        );
+
+    public string AzureContainerRegistry { get; } = System.Environment.GetEnvironmentVariable("AZURE_CONTAINER_REGISTRY");
+
+    public bool ShouldRunIntegrationTests() =>  !string.IsNullOrWhiteSpace(AzureContainerRegistry) &&
+                                                (
+                                                    AzureCredentials.AzureCredentialsSpecified ||
+                                                    IsLocalBuild
+                                                );
 }
 
+public record AzureCredentials(
+    string TenantId,
+    string ClientId,
+    string ClientSecret,
+    string AuthorityHost = "login.microsoftonline.com"
+)
+{
+    public bool AzureCredentialsSpecified { get; } = !string.IsNullOrWhiteSpace(TenantId) &&
+                                                     !string.IsNullOrWhiteSpace(ClientId) &&
+                                                     string.IsNullOrWhiteSpace(ClientSecret) &&
+                                                     string.IsNullOrWhiteSpace(AuthorityHost);
+}
 private record ExtensionHelper(Func<string, CakeTaskBuilder> TaskCreate, Func<CakeReport> Run);

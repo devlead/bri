@@ -36,6 +36,7 @@ Setup(
             version,
             isMainBranch,
             !context.IsRunningOnWindows(),
+            context.BuildSystem().IsLocalBuild,
             "src",
             new DotNetMSBuildSettings()
                 .SetConfiguration("Release")
@@ -154,6 +155,7 @@ Task("Clean")
             )
     )
 .Then("Integration-Tests-Tool")
+    .WithCriteria<BuildData>((context, data) => data.ShouldRunIntegrationTests(), "ShouldRunIntegrationTests")
     .Does<BuildData>(
         static (context, data) => context.DotNetTool(
                 "tool",
@@ -163,11 +165,20 @@ Task("Clean")
                                                         .Append("--")
                                                         .Append("bri")
                                                         .Append("inventory")
-                                                        .Append("--help"),
-                                                        // TODO test against ACR
+                                                        .AppendQuotedSecret(data.AzureContainerRegistry)
+                                                        .AppendQuoted(data.IntegrationTestPath.FullPath),
                     WorkingDirectory = data.IntegrationTestPath
                 }
             )
+    )
+.Then("Integration-Tests-Upload-Results")
+    .WithCriteria(BuildSystem.IsRunningOnGitHubActions, nameof(BuildSystem.IsRunningOnGitHubActions))
+    .WithCriteria<BuildData>((context, data) => data.ShouldRunIntegrationTests(), "ShouldRunIntegrationTests")
+    .Does<BuildData>(
+         (context, data) => GitHubActions.Commands.UploadArtifact(
+            data.IntegrationTestPath.Combine(data.AzureContainerRegistry),
+            data.AzureContainerRegistry
+         )
     )
 .Then("Integration-Tests")
     .Default()

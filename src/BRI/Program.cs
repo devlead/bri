@@ -9,8 +9,6 @@ using Spectre.Console.Cli.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
 using System.Net.Http.Headers;
 
-AccessToken? cachedAccessToken = default;
-
 var serviceCollection = new ServiceCollection()
     .AddCakeCore()
     .AddLogging(configure =>
@@ -33,41 +31,7 @@ var serviceCollection = new ServiceCollection()
     .AddSingleton<BicepModuleMarkdownService>();
 
 
-serviceCollection.AddHttpClient<AcrTokenService>(
-    (servcices, client) =>
-    {
-        async Task<string> GetToken()
-        {
-            if (cachedAccessToken.HasValue && (cachedAccessToken.Value.ExpiresOn - DateTimeOffset.UtcNow).TotalMinutes > 1)
-            {
-                return cachedAccessToken.Value.Token;
-            }
-
-            var logger = servcices.GetRequiredService<ILogger<AcrTokenService>>();
-
-            logger.LogInformation("Getting azure token...");
-
-            var tokenCredential = new DefaultAzureCredential();
-            var accessToken = await tokenCredential.GetTokenAsync(
-                new TokenRequestContext(scopes: new string[] { "https://management.azure.com/.default" })
-            );
-            cachedAccessToken = accessToken;
-
-            logger.LogInformation("Azure token acquired, expires on {ExpiresOn}.", accessToken.ExpiresOn.ToLocalTime());
-
-            return accessToken.Token;
-        }
-
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
-            "Beaerer",
-            GetToken()
-                .ConfigureAwait(false)
-                .GetAwaiter()
-                .GetResult()
-            );
-    }
-);
-
+serviceCollection.AddHttpClient<AcrTokenService>();
 serviceCollection.AddHttpClient<AcrCatalogService>();
 serviceCollection.AddHttpClient<AcrRepositoryTagService>();
 serviceCollection.AddHttpClient<AcrRepositoryManifestService>(

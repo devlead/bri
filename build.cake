@@ -175,10 +175,21 @@ Task("Clean")
     .WithCriteria(BuildSystem.IsRunningOnGitHubActions, nameof(BuildSystem.IsRunningOnGitHubActions))
     .WithCriteria<BuildData>((context, data) => data.ShouldRunIntegrationTests(), "ShouldRunIntegrationTests")
     .Does<BuildData>(
-         (context, data) => GitHubActions.Commands.UploadArtifact(
-            data.IntegrationTestPath.Combine(data.AzureContainerRegistry),
-            data.AzureContainerRegistry
-         )
+         async (context, data) => {
+            var resultPath = data.IntegrationTestPath.Combine(data.AzureContainerRegistry);
+            await GitHubActions.Commands.UploadArtifact(
+                resultPath,
+                data.AzureContainerRegistry
+            );
+            GitHubActions.Commands.SetStepSummary(
+                string.Join(
+                    System.Environment.NewLine,
+                    context.GetFiles($"{resultPath.FullPath}/**/*.md")
+                        .Select(filePath => context.FileSystem.GetFile(filePath).ReadLines(Encoding.UTF8))
+                        .SelectMany(line => line)
+                )
+            );
+         }
     )
 .Then("Integration-Tests")
     .Default()

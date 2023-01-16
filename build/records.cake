@@ -65,7 +65,7 @@ public record AzureCredentials(
 {
     public bool AzureCredentialsSpecified { get; } = !string.IsNullOrWhiteSpace(TenantId) &&
                                                      !string.IsNullOrWhiteSpace(ClientId) &&
-                                                     string.IsNullOrWhiteSpace(ClientSecret) &&
-                                                     string.IsNullOrWhiteSpace(AuthorityHost);
+                                                     !string.IsNullOrWhiteSpace(ClientSecret) &&
+                                                     !string.IsNullOrWhiteSpace(AuthorityHost);
 }
 private record ExtensionHelper(Func<string, CakeTaskBuilder> TaskCreate, Func<CakeReport> Run);

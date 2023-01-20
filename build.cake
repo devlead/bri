@@ -41,10 +41,7 @@ Setup(
             new DotNetMSBuildSettings()
                 .SetConfiguration("Release")
                 .SetVersion(version)
-                .WithProperty("PackAsTool", "true")
-                .WithProperty("PackageId", "BRI")
                 .WithProperty("Copyright", $"Mattias Karlsson © {DateTime.UtcNow.Year}")
-                .WithProperty("ToolCommandName", "bri")
                 .WithProperty("Authors", "devlead")
                 .WithProperty("Company", "devlead")
                 .WithProperty("PackageLicenseExpression", "MIT")
@@ -104,6 +101,17 @@ Task("Clean")
         static (context, data) => context.DotNetBuild(
             data.ProjectRoot.FullPath,
             new DotNetBuildSettings {
+                NoRestore = true,
+                MSBuildSettings = data.MSBuildSettings
+            }
+        )
+    )
+.Then("Test")
+    .Does<BuildData>(
+        static (context, data) => context.DotNetTest(
+            data.ProjectRoot.FullPath,
+            new DotNetTestSettings {
+                NoBuild = true,
                 NoRestore = true,
                 MSBuildSettings = data.MSBuildSettings
             }

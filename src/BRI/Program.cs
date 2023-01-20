@@ -1,13 +1,14 @@
-﻿using Azure.Core;
-using Azure.Identity;
-using BRI.Commands;
+﻿using BRI.Commands;
 using BRI.Services;
 using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Spectre.Console.Cli.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
-using System.Net.Http.Headers;
+using BRI.Services.Acr;
+using BRI.Services.Acr.Repository;
+using Azure.Core;
+using Azure.Identity;
 
 var serviceCollection = new ServiceCollection()
     .AddCakeCore()
@@ -28,18 +29,26 @@ var serviceCollection = new ServiceCollection()
                     })
                     .Build()
             ))
-    .AddSingleton<BicepModuleMarkdownService>();
+    .AddSingleton<AzureTokenService>(
+        async () =>
+        {
+            var tokenCredential = new DefaultAzureCredential();
+            var accessToken = await tokenCredential.GetTokenAsync(
+                new TokenRequestContext(scopes: new string[] { "https://management.azure.com/.default" })
+            );
+            return accessToken;
+        }
+    )
+    .AddSingleton<BicepModuleMarkdownService>()
+    .AddSingleton<RepositoryService>()
+    .AddSingleton<CatalogService>()
+    .AddSingleton<TagService>()
+    .AddSingleton<ManifestService>()
+    .AddSingleton<BlobService>()
+    .AddSingleton<InventoryCommand>()
+    .AddSingleton<TokenService>();
 
-
-serviceCollection.AddHttpClient<AcrTokenService>();
-serviceCollection.AddHttpClient<AcrCatalogService>();
-serviceCollection.AddHttpClient<AcrRepositoryTagService>();
-serviceCollection.AddHttpClient<AcrRepositoryManifestService>(
-    client => client.DefaultRequestHeaders.Accept.TryParseAdd(
-        "application/vnd.cncf.oras.artifact.manifest.v1+json;q=0.3, application/vnd.oci.image.manifest.v1+json;q=0.4, application/vnd.oci.artifact.manifest.v1+json;q=0.5, application/vnd.docker.distribution.manifest.v2+json;q=0.6, application/vnd.docker.distribution.manifest.list.v2+json;q=0.7"
-        )
-    );
-serviceCollection.AddHttpClient<AcrRepositoryBlobService>();
+serviceCollection.AddHttpClient();
 
 using var registrar = new DependencyInjectionRegistrar(serviceCollection);
 var app = new CommandApp(registrar);

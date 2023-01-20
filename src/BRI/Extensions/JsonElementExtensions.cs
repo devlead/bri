@@ -1,8 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System.Text;
-using System.Text.Json;
-
-namespace BRI.Extensions;
+﻿namespace BRI.Extensions;
 
 public static class JsonElementExtensions
 {
@@ -20,7 +16,7 @@ public static class JsonElementExtensions
 
     private static string ArrayToBicep(JsonElement element, int level)
     {
-        string indent = "".PadLeft(level * 2);
+        var indent = GetLevelIndent(level);
         return $"{indent}[{string.Concat(
                             element.EnumerateArray().Select(value => $"\r\n{indent}  {value.ToBicep()}")
                 )}\r\n{indent}]";
@@ -38,7 +34,7 @@ public static class JsonElementExtensions
 
     private static string ObjectToBicep(JsonElement element, int level)
     {
-        string indent = "".PadLeft(level * 2);
+        var indent = GetLevelIndent(level);
         return element
                 .EnumerateObject()
                 .Aggregate(
@@ -54,4 +50,20 @@ public static class JsonElementExtensions
                                 .ToString()
                     );
     }
+
+    private static string GetLevelIndent(int level)
+        => level switch
+        {
+            0 => string.Empty,
+            1 => "  ",
+            2 => "    ",
+            3 => "      ",
+            4 => "        ",
+            5 => "          ",
+            6 => "            ",
+            7 => "              ",
+            8 => "                ",
+            9 => "                  ",
+            _ => "".PadLeft(level * 2)
+        };
 }

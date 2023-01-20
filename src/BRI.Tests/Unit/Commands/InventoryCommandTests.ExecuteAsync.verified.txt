@@ -1,0 +1,43 @@
+﻿{
+  Output: {
+    Path: /home/docs,
+    Exists: true,
+    Hidden: false,
+    Directories: [
+      {
+        Path: /home/docs/bri.azurecr.io,
+        Exists: true,
+        Hidden: false,
+        Directories: [
+          {
+            Path: /home/docs/bri.azurecr.io/bicep,
+            Exists: true,
+            Hidden: false,
+            Directories: [
+              {
+                Path: /home/docs/bri.azurecr.io/bicep/modules,
+                Exists: true,
+                Hidden: false,
+                Directories: [
+                  {
+                    Path: /home/docs/bri.azurecr.io/bicep/modules/bri,
+                    Exists: true,
+                    Hidden: false,
+                    Files: [
+                      {
+                        Path: /home/docs/bri.azurecr.io/bicep/modules/bri/2.0.0.0.md,
+                        Exists: true,
+                        Hidden: false,
+                        Length: 5234
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

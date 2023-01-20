@@ -1,0 +1,48 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Using Include="System.Text" />
+    <Using Include="NSubstitute" />
+    <Using Include="Microsoft.Extensions.Logging" />
+    <Using Include="Microsoft.Extensions.DependencyInjection" />
+    <Using Include="Cake.Testing" />
+    <Using Include="BRI.Tests.Fixture" />
+    <Using Include="BRI.Tests.Extensions" />
+    <Using Include="BRI.Services.Acr.Repository" />
+    <Using Include="BRI.Services.Acr" />
+    <Using Include="BRI.Services" />
+    <Using Include="BRI.Models.Acr.Repository.Tag" />
+    <Using Include="BRI.Models.Acr.Repository.Module" />
+    <Using Include="BRI.Extensions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\" />
+    <EmbeddedResource Include="..\..\resources\bri.json" Link="Resources\bri.json" />
+    <EmbeddedResource Include="..\..\resources\bri.bicep" Link="Resources\bri.bicep" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
+    <PackageReference Include="NUnit" Version="3.13.3" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
+    <PackageReference Include="NUnit.Analyzers" Version="3.3.0" />
+    <PackageReference Include="coverlet.collector" Version="3.1.2" />
+    <PackageReference Include="Verify.NUnit" Version="19.6.0" />
+    <PackageReference Include="Verify.Http" Version="4.1.0" />
+    <PackageReference Include="Cake.Testing" Version="3.0.0" />
+    <PackageReference Include="NSubstitute" Version="4.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BRI\BRI.csproj" />
+  </ItemGroup>
+
+</Project>

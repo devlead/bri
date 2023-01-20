@@ -7,6 +7,12 @@
       },
       Metadata: {
         Description: Age of animal
+      },
+      MaxValue: 99,
+      MinValue: 1,
+      ParsedType: {
+        Secure: false,
+        Type: int
       }
     },
     alive: {
@@ -16,12 +22,20 @@
       },
       Metadata: {
         Description: Indicates if animal is alive
+      },
+      ParsedType: {
+        Secure: false,
+        Type: bool
       }
     },
     animal: {
       Type: object,
       DefaultValue: {
         ValueKind: Object
+      },
+      ParsedType: {
+        Secure: false,
+        Type: object
       }
     },
     fruit: {
@@ -31,12 +45,22 @@
       },
       Metadata: {
         Description: Possible fruits.
+      },
+      ParsedType: {
+        Secure: false,
+        Type: array
       }
     },
     name: {
       Type: secureString,
       Metadata: {
         Description: Name of animal
+      },
+      MaxLength: 20,
+      MinLength: 1,
+      ParsedType: {
+        Secure: true,
+        Type: string
       }
     },
     parent: {
@@ -47,13 +71,31 @@
       AllowedValues: [
         Adam,
         Eve
-      ]
+      ],
+      ParsedType: {
+        Secure: false,
+        Type: string
+      }
+    },
+    topSecret: {
+      Type: secureObject,
+      Metadata: {
+        Description: Very secret object
+      },
+      ParsedType: {
+        Secure: true,
+        Type: object
+      }
     }
   },
   Outputs: {
     animal: {
       Type: object,
       Value: [parameters('animal')]
+    },
+    base64Encoded: {
+      Type: string,
+      Value: [variables('base64Encoded')]
     },
     eatsFruit: {
       Type: bool,
@@ -78,7 +120,7 @@
     Generator: {
       Name: bicep,
       Version: 0.13.1.58284,
-      TemplateHash: 11028527346586378456
+      TemplateHash: 9883379998541991298
     },
     Documentation: {
       Summary: A brief summary of the module.,

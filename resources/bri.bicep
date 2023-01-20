@@ -33,6 +33,7 @@ param alive bool = true
 @minValue(1)
 @maxValue(99)
 param age int = 3
+
 param animal object = {
   name: name
   age: age
@@ -41,8 +42,17 @@ param animal object = {
   alive: alive
 }
 
+@secure()
+@description('Very secret object')
+param topSecret object
+
 var eatsFruit = contains(fruit, animal.eats)
 var uniqueName = uniqueString(name)
+var base64Encoded = reduce(
+                      items(topSecret),
+                      '',
+                      (result, item) => '${result}\r\n${item.key}:${base64(item.value)}'
+                    )
 
 @description('Unique name of animal')
 output uniqueName string = uniqueName
@@ -50,3 +60,4 @@ output animal object = animal
 @description('Flag if animal eats fruit.')
 output eatsFruit bool = eatsFruit
 output parent string = parent
+output base64Encoded string = base64Encoded

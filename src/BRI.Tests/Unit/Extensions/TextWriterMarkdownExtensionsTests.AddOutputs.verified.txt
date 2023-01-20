@@ -7,3 +7,4 @@
 | `animal`                            | `object`                                                |                                                                                                 |
 | `eatsFruit`                         | `bool`                                                  | Flag if animal eats fruit.                                                                      |
 | `parent`                            | `string`                                                |                                                                                                 |
+| `base64Encoded`                     | `string`                                                |                                                                                                 |

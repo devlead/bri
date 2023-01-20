@@ -5,11 +5,11 @@
     "_generator": {
       "name": "bicep",
       "version": "0.13.1.58284",
-      "templateHash": "11028527346586378456"
+      "templateHash": "9883379998541991298"
     },
     "documentation": {
       "summary": "A brief summary of the module.",
-      "description": "A detailed description of the bicep module.\nUsed for the overview in documentation.\n"
+      "description": "A detailed description of the bicep module.\r\nUsed for the overview in documentation.\r\n"
     }
   },
   "parameters": {
@@ -65,11 +65,18 @@
         "eats": "Banana",
         "alive": "[parameters('alive')]"
       }
+    },
+    "topSecret": {
+      "type": "secureObject",
+      "metadata": {
+        "description": "Very secret object"
+      }
     }
   },
   "variables": {
     "eatsFruit": "[contains(parameters('fruit'), parameters('animal').eats)]",
-    "uniqueName": "[uniqueString(parameters('name'))]"
+    "uniqueName": "[uniqueString(parameters('name'))]",
+    "base64Encoded": "[reduce(items(parameters('topSecret')), '', lambda('result', 'item', format('{0}\r\n{1}:{2}', lambdaVariables('result'), lambdaVariables('item').key, base64(lambdaVariables('item').value))))]"
   },
   "resources": [],
   "outputs": {
@@ -94,6 +101,10 @@
     "parent": {
       "type": "string",
       "value": "[parameters('parent')]"
+    },
+    "base64Encoded": {
+      "type": "string",
+      "value": "[variables('base64Encoded')]"
     }
   }
 }

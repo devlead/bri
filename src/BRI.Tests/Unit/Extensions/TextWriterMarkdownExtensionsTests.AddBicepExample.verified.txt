@@ -2,15 +2,28 @@
 ## Example
 
 ```bicep
+@description('The target environment.')
 param env string
+
+@description('The deployment version.')
 param version string = '1.0.0.0'
+
+@description('Name of animal')
 @secure()
+@minLength(1)
+@maxLength(20)
 param name string
+
+@description('Very secret object')
+@secure()
+param topSecret object
+
 
 module bri 'br:bri.azurecr.io/bicep/modules/bri:2.0.0.0' = {
     name: 'bri${env}${version}'
     params: {
       name: name
+      topSecret: topSecret
     }
 }
 ```

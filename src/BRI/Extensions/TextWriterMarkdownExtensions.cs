@@ -117,7 +117,7 @@ public static  class TextWriterMarkdownExtensions
             foreach (var (Key, Value) in module.Outputs)
             {
                 await writer.WriteLineAsync(
-                    $"| {Key.CodeLine(),-NameColumnWidth} | {Value.Type.CodeLine(),-TypeColumnWidth} | {Value.Metadata?.Description.CodeLine(),-DescriptionColumnWidth} |"
+                    $"| {Key.CodeLine(),-NameColumnWidth} | {Value.Type.CodeLine(),-TypeColumnWidth} | {Value.Metadata?.Description.SingleLine(),-DescriptionColumnWidth} |"
                     );
             }
         }

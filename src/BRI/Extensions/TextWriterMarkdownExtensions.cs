@@ -1,8 +1,4 @@
-﻿using BRI.Models;
-using System.Globalization;
-using System.Text.Json;
-
-namespace BRI.Extensions;
+﻿namespace BRI.Extensions;
 
 public static  class TextWriterMarkdownExtensions
 {
@@ -12,15 +8,19 @@ public static  class TextWriterMarkdownExtensions
 
     public static async Task AddFrontmatter(
         this TextWriter writer,
-        AcrRepositoryTag tag,
-        string moduleName
-        )
+        Tag tag,
+        string moduleName,
+        string? summary)
     {
         await writer.WriteLineAsync(
             FormattableString.Invariant(
                     $$"""
                     ---
-                    summary: Bicep module {{moduleName}}:{{tag.Name}}
+                    summary: {{(
+                        string.IsNullOrWhiteSpace(summary)
+                            ? $"Bicep module {moduleName}:{tag.Name}"
+                            : summary
+                            )}}
                     modifiedby: BRI
                     modified: {{tag.LastUpdateTime:yyyy-MM-dd HH:mm}}
                     order: -{{tag.LastUpdateTime:yyyyMMddHHmm}}
@@ -32,16 +32,20 @@ public static  class TextWriterMarkdownExtensions
 
     public static async Task AddOverview(
         this TextWriter writer,
-        AcrRepositoryTag tag,
+        Tag tag,
         string moduleName,
-        string moduleFullName
-        )
+        string moduleFullName,
+        string? description)
     {
         await writer.WriteLineAsync(
             FormattableString.Invariant(
                     $$"""
                     # Overview
-                    
+                    {{(
+                    string.IsNullOrWhiteSpace(description)
+                        ? string.Empty
+                        : $"{Environment.NewLine}{description.Trim().NormalizeLineEndings()}{Environment.NewLine}"
+                    )}}
                     |                                     |                                                                                                 |
                     |-------------------------------------|-------------------------------------------------------------------------------------------------|
                     | **Name**                            | {{moduleName.CodeLine(),-DescriptionColumnWidth}} |
@@ -58,7 +62,7 @@ public static  class TextWriterMarkdownExtensions
 
     public static async Task AddParameters(
         this TextWriter writer,
-        AcrRepositoryModule module
+        Module module
         )
     {
         await writer.WriteLineAsync(
@@ -93,7 +97,7 @@ public static  class TextWriterMarkdownExtensions
 
     public static async Task AddOutputs(
         this TextWriter writer,
-        AcrRepositoryModule module
+        Module module
         )
     {
         await writer.WriteLineAsync(
@@ -121,7 +125,7 @@ public static  class TextWriterMarkdownExtensions
 
     public static async Task AddBicepExample(
         this TextWriter writer,
-        AcrRepositoryModule module,
+        Module module,
         string moduleName,
         string moduleFullName
         )
@@ -187,7 +191,7 @@ public static  class TextWriterMarkdownExtensions
             }
 
             await writer.WriteLineAsync(
-                $"    {Key}: {Key}"
+                $"      {Key}: {Key}"
                 );
         }
 

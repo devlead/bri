@@ -17,7 +17,7 @@ jobs:
         os: [windows-latest, ubuntu-latest, macos-latest]
     steps:
       - name: Get the sources
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -27,7 +27,7 @@ jobs:
           global-json-file: global.json
 
       - name: Run Cake script
-        uses: cake-build/cake-action@v1
+        uses: cake-build/cake-action@359a9f4da8412c68b42dee69ed5d581e7905fbd4
         env:
           NuGetReportSettings_SharedKey: ${{ secrets.NUGETREPORTSETTINGS_SHAREDKEY }}
           NuGetReportSettings_WorkspaceId: ${{ secrets.NUGETREPORTSETTINGS_WORKSPACEID }}

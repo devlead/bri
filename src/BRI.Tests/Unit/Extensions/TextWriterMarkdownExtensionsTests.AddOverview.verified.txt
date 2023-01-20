@@ -1,0 +1,14 @@
+﻿# Overview
+
+A detailed description of the bicep module.
+Used for the overview in documentation.
+
+|                                     |                                                                                                 |
+|-------------------------------------|-------------------------------------------------------------------------------------------------|
+| **Name**                            | `bri`                                                                                           |
+| **Tag**                             | `2.0.0.0`                                                                                       |
+| **FullName**                        | `br:bri.azurecr.io/bicep/modules/bri:2.0.0.0`                                                   |
+| **Last updated**                    | `2023-01-18 12:24:27:+00:00`                                                                    |
+| **Created**                         | `2023-01-18 12:24:27:+00:00`                                                                    |
+| **Digest**                          | `sha256:b5bd971dc2dacc73937e5b9cb731e02c857845aa00b7a8124ee0afdd24fd621e`                       |
+

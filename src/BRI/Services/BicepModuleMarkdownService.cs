@@ -1,17 +1,10 @@
-﻿using BRI.Commands.Settings;
-using BRI.Extensions;
-using BRI.Models;
-using Cake.Common.IO;
-using Microsoft.Extensions.Logging;
+﻿using Cake.Common.IO;
 
 namespace BRI.Services;
 
-public record BicepModuleMarkdownService(
-    ILogger<BicepModuleMarkdownService> Logger,
-    ICakeContext CakeContext
-    )
+public record BicepModuleMarkdownService(ICakeContext CakeContext)
 {
-    public async Task CreateModuleMarkdown(InventorySettings settings, DirectoryPath targetPath, string repo, AcrRepositoryTag tag, AcrRepositoryModule module)
+    public async Task CreateModuleMarkdown(string containerService, DirectoryPath targetPath, string repo, Tag tag, Module module)
     {
         var repoPath = targetPath.Combine(repo);
         CakeContext.EnsureDirectoryExists(repoPath);
@@ -19,7 +12,7 @@ public record BicepModuleMarkdownService(
         var tagMDPath = repoPath.CombineWithFilePath($"{tag.Name}.md");
 
         var moduleName = repoPath.GetDirectoryName();
-        var moduleFullName = $"br:{settings.AcrLoginServer}/{repo}:{tag.Name}";
+        var moduleFullName = $"br:{containerService}/{repo}:{tag.Name}";
 
 
         using var stream = CakeContext
@@ -32,10 +25,9 @@ public record BicepModuleMarkdownService(
             System.Text.Encoding.UTF8
             );
 
+        await writer.AddFrontmatter(tag, moduleName, module.Metadata?.Documentation?.Summary);
 
-        await writer.AddFrontmatter(tag, moduleName);
-
-        await writer.AddOverview(tag, moduleName, moduleFullName);
+        await writer.AddOverview(tag, moduleName, moduleFullName, module.Metadata?.Documentation?.Description);
 
         await writer.AddParameters(module);
 

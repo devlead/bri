@@ -1,0 +1,9 @@
+﻿
+## Outputs
+
+| Name                                | Type                                                    | Description                                                                                     |
+|-------------------------------------|---------------------------------------------------------|-------------------------------------------------------------------------------------------------|
+| `uniqueName`                        | `string`                                                | `Unique name of animal`                                                                         |
+| `animal`                            | `object`                                                |                                                                                                 |
+| `eatsFruit`                         | `bool`                                                  | `Flag if animal eats fruit.`                                                                    |
+| `parent`                            | `string`                                                |                                                                                                 |

@@ -1,9 +1,4 @@
-using BRI.Commands.Settings;
-using BRI.Services;
 using Cake.Common.IO;
-using Microsoft.Extensions.Logging;
-using Spectre.Console.Cli;
-using System.Diagnostics;
 
 namespace BRI.Commands;
 
@@ -11,15 +6,13 @@ public class InventoryCommand : AsyncCommand<InventorySettings>
 {
     private ICakeContext CakeContext { get; }
     private ILogger Logger { get; }
-    private AcrCatalogService AcrCatalogService { get; }
-    private AcrRepositoryTagService AcrRepositoryTagService { get; }
-    private AcrRepositoryManifestService AcrRepositoryManifestService { get; }
-    private AcrRepositoryBlobService AcrRepositoryBlobService { get; }
+    private CatalogService CatalogService { get; }
+    private RepositoryService RepositoryService { get; }
     private BicepModuleMarkdownService BicepModuleMarkdownService { get; }
 
     public override async Task<int> ExecuteAsync(CommandContext context, InventorySettings settings)
     {
-        var sw = Stopwatch.StartNew();
+        var sw = System.Diagnostics.Stopwatch.StartNew();
         Logger.LogInformation("AcrLoginServer: {AcrLoginServer}", settings.AcrLoginServer);
         Logger.LogInformation("OutputPath: {OutputPath}", settings.OutputPath);
 
@@ -30,13 +23,13 @@ public class InventoryCommand : AsyncCommand<InventorySettings>
         Logger.LogInformation("Done cleaning directory {TargetPath}.", targetPath);
 
         Logger.LogInformation("Getting repositories...");
-        var repos = await AcrCatalogService.GetRepositories(settings.AcrLoginServer);
+        var repos = await CatalogService.GetRepositories(settings.AcrLoginServer);
         Logger.LogInformation("Found {RepoCount}", repos.Count);
 
         foreach(var repo in repos)
         {
             Logger.LogInformation("Getting tags for {Repo}...", repo);
-            var tags = await AcrRepositoryTagService.GetTags(
+            var tags = await RepositoryService.Tag.GetTags(
                             settings.AcrLoginServer,
                             repo,
                             settings.TagLimitNumber
@@ -46,7 +39,7 @@ public class InventoryCommand : AsyncCommand<InventorySettings>
             foreach(var tag in tags)
             {
                 Logger.LogInformation("Getting manifest bicep layers for {Repo} tag {Tag}...", repo, tag.Name);
-                var layers = await AcrRepositoryManifestService.GetManifestLayers(
+                var layers = await RepositoryService.Manifest.GetManifestLayers(
                                     settings.AcrLoginServer,
                                     repo,
                                     tag.Digest
@@ -55,13 +48,13 @@ public class InventoryCommand : AsyncCommand<InventorySettings>
 
                 foreach(var layer in layers)
                 {
-                    var module = await AcrRepositoryBlobService.GetModule(
+                    var module = await RepositoryService.Blob.GetModule(
                                         settings.AcrLoginServer,
                                         repo,
                                         layer.Digest
                                     );
 
-                    await BicepModuleMarkdownService.CreateModuleMarkdown(settings, targetPath, repo, tag, module);
+                    await BicepModuleMarkdownService.CreateModuleMarkdown(settings.AcrLoginServer, targetPath, repo, tag, module);
                 }
             }
         }
@@ -75,19 +68,15 @@ public class InventoryCommand : AsyncCommand<InventorySettings>
     public InventoryCommand(
         ICakeContext cakeContext,
         ILogger<InventoryCommand> logger,
-        AcrCatalogService acrCatalogService,
-        AcrRepositoryTagService acrRepositoryTagService,
-        AcrRepositoryManifestService acrRepositoryManifestService,
-        AcrRepositoryBlobService acrRepositoryBlobService,
+        CatalogService catalog,
+        RepositoryService repository,
         BicepModuleMarkdownService bicepModuleMarkdownService
         )
     {
         CakeContext = cakeContext;
         Logger = logger;
-        AcrCatalogService = acrCatalogService;
-        AcrRepositoryTagService = acrRepositoryTagService;
-        AcrRepositoryManifestService = acrRepositoryManifestService;
-        AcrRepositoryBlobService = acrRepositoryBlobService;
+        CatalogService = catalog;
+        RepositoryService = repository;
         BicepModuleMarkdownService = bicepModuleMarkdownService;
     }
 }

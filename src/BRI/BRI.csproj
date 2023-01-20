@@ -7,7 +7,31 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <ImplicitUsings>enable</ImplicitUsings>
     <PackageIcon>icon/bri.png</PackageIcon>
+    <PackAsTool>true</PackAsTool>
+    <PackageId>BRI</PackageId>
+    <ToolCommandName>bri</ToolCommandName>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Using Include="System.Globalization" />
+    <Using Include="System.Text" />
+    <Using Include="System.Text.Json" />
+    <Using Include="System.Text.Json.Serialization" />
+    <Using Include="Microsoft.Extensions.Logging" />
+    <Using Include="Microsoft.Extensions.DependencyInjection" />
+    <Using Include="BRI.Commands.Validation" />
+    <Using Include="BRI.Commands.Settings" />
+    <Using Include="BRI.Extensions" />
+    <Using Include="BRI.Models.Acr.Token" />
+    <Using Include="BRI.Models.Acr.Repository" />
+    <Using Include="BRI.Models.Acr.Repository.Tag" />
+    <Using Include="BRI.Models.Acr.Repository.Module" />
+    <Using Include="BRI.Services" />
+    <Using Include="BRI.Services.Acr" />
+    <Using Include="BRI.Services.Acr.Repository" />
+    <Using Include="Spectre.Console" />
+    <Using Include="Spectre.Console.Cli" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.8.0" />
@@ -18,8 +42,6 @@
     <PackageReference Include="System.Linq.Async" Version="6.0.1" />
     <PackageReference Include="Cake.Bridge.DependencyInjection" Version="0.13.0" />
     <PackageReference Include="Cake.Common" Version="3.0.0" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Spectre.Console.Cli.Extensions.DependencyInjection" Version="0.1.0" />
     <PackageReference Include="Spectre.Console" Version="0.45.0" />
     <PackageReference Include="Spectre.Console.Cli" Version="0.45.0" />

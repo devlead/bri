@@ -1,0 +1,91 @@
+﻿{
+  Parameters: {
+    age: {
+      Type: int,
+      DefaultValue: {
+        ValueKind: Number
+      },
+      Metadata: {
+        Description: Age of animal
+      }
+    },
+    alive: {
+      Type: bool,
+      DefaultValue: {
+        ValueKind: True
+      },
+      Metadata: {
+        Description: Indicates if animal is alive
+      }
+    },
+    animal: {
+      Type: object,
+      DefaultValue: {
+        ValueKind: Object
+      }
+    },
+    fruit: {
+      Type: array,
+      DefaultValue: {
+        ValueKind: Array
+      },
+      Metadata: {
+        Description: Possible fruits.
+      }
+    },
+    name: {
+      Type: secureString,
+      Metadata: {
+        Description: Name of animal
+      }
+    },
+    parent: {
+      Type: string,
+      DefaultValue: {
+        ValueKind: String
+      },
+      AllowedValues: [
+        Adam,
+        Eve
+      ]
+    }
+  },
+  Outputs: {
+    animal: {
+      Type: object,
+      Value: [parameters('animal')]
+    },
+    eatsFruit: {
+      Type: bool,
+      Value: [variables('eatsFruit')],
+      Metadata: {
+        Description: Flag if animal eats fruit.
+      }
+    },
+    parent: {
+      Type: string,
+      Value: [parameters('parent')]
+    },
+    uniqueName: {
+      Type: string,
+      Value: [variables('uniqueName')],
+      Metadata: {
+        Description: Unique name of animal
+      }
+    }
+  },
+  Metadata: {
+    Generator: {
+      Name: bicep,
+      Version: 0.13.1.58284,
+      TemplateHash: 11028527346586378456
+    },
+    Documentation: {
+      Summary: A brief summary of the module.,
+      Description:
+A detailed description of the bicep module.
+Used for the overview in documentation.
+
+    }
+  }
+}

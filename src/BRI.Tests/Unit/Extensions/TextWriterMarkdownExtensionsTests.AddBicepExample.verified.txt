@@ -1,0 +1,16 @@
+﻿
+## Example
+
+```bicep
+param env string
+param version string = '1.0.0.0'
+@secure()
+param name string
+
+module bri 'br:bri.azurecr.io/bicep/modules/bri:2.0.0.0' = {
+    name: 'bri${env}${version}'
+    params: {
+      name: name
+    }
+}
+```

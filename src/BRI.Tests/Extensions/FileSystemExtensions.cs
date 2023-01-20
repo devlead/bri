@@ -48,7 +48,10 @@ public static class FileSystemExtensions
                   file.Path,
                   file.Exists,
                   file.Hidden,
-                  file.Length
+                  file
+                    .ReadLines(Encoding.UTF8)
+                    .SelectMany(c => c)
+                    .LongCount()
                   );
     }
 }

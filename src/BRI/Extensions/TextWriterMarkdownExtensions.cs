@@ -1,4 +1,8 @@
-﻿namespace BRI.Extensions;
+﻿using Microsoft.Extensions.Primitives;
+using Newtonsoft.Json.Linq;
+using System.Runtime.CompilerServices;
+
+namespace BRI.Extensions;
 
 public static  class TextWriterMarkdownExtensions
 {
@@ -78,12 +82,7 @@ public static  class TextWriterMarkdownExtensions
 
         foreach (var (Key, Value) in module.Parameters)
         {
-            var type = (Value.AllowedValues is string[] values && values.Any())
-                ? $"{Value.Type.CodeLine()}<br>{string.Join(
-                        ",<br>",
-                        values.Select(value => $"'{value}'")
-                    ).PreLine()}"
-                : Value.Type.CodeLine();
+            var type = Value.GetParameterType();
 
             var required = Value.DefaultValue is JsonElement defaultValue
                 ? $"No<br>{defaultValue.ToBicep().Trim().PreLine()}"
@@ -92,6 +91,57 @@ public static  class TextWriterMarkdownExtensions
             await writer.WriteLineAsync(
                 $"| {Key.CodeLine(),-NameColumnWidth} | {type,-TypeColumnWidth} | {required.SingleLine(),-90} | {Value.Metadata?.Description.SingleLine(),-DescriptionColumnWidth} |"
                 );
+        }
+    }
+
+    private static string GetParameterType(this Parameter value)
+    {
+        var typeBuilder = new StringBuilder();
+        if (value.ParsedType.Secure)
+        {
+            typeBuilder.Append("**▲ secure ▲**<br>");
+        }
+        typeBuilder.Append(value.ParsedType.Type.CodeLine());
+
+        if(value.AllowedValues is string[] values && values.Any())
+        {
+            typeBuilder.Append("<br>");
+            typeBuilder.Append(string.Join(
+                        ",<br>",
+                        values.Select(value => $"'{value}'")
+                    ).PreLine());
+        }
+
+        typeBuilder.AppendRangeIfSet("Value", value.MinValue, value.MaxValue);
+        typeBuilder.AppendRangeIfSet("Length", value.MinLength, value.MaxLength);
+
+        return typeBuilder.ToString();
+    }
+
+    private static void AppendRangeIfSet(
+        this StringBuilder stringBuilder,
+        string key,
+        object? min,
+        object? max
+        )
+    {
+        if (min == null && max == null)
+        {
+            return;
+        }
+
+        stringBuilder.Append("<br>");
+        stringBuilder.Append(key);
+        stringBuilder.Append(':');
+        if (min != null)
+        {
+            stringBuilder.Append(' ');
+            stringBuilder.Append(FormattableString.Invariant($"≧{min}").CodeLine());
+        }
+        if (max != null)
+        {
+            stringBuilder.Append(' ');
+            stringBuilder.Append(FormattableString.Invariant($"≦{max}").CodeLine());
         }
     }
 
@@ -117,7 +167,7 @@ public static  class TextWriterMarkdownExtensions
             foreach (var (Key, Value) in module.Outputs)
             {
                 await writer.WriteLineAsync(
-                    $"| {Key.CodeLine(),-NameColumnWidth} | {Value.Type.CodeLine(),-TypeColumnWidth} | {Value.Metadata?.Description.CodeLine(),-DescriptionColumnWidth} |"
+                    $"| {Key.CodeLine(),-NameColumnWidth} | {Value.Type.CodeLine(),-TypeColumnWidth} | {Value.Metadata?.Description.SingleLine(),-DescriptionColumnWidth} |"
                     );
             }
         }
@@ -137,8 +187,12 @@ public static  class TextWriterMarkdownExtensions
                     ## Example
                     
                     ```bicep
+                    @description('The target environment.')
                     param env string
+
+                    @description('The deployment version.')
                     param version string = '1.0.0.0'
+
                     """
                 )
             );
@@ -156,20 +210,29 @@ public static  class TextWriterMarkdownExtensions
             {
                 continue;
             }
-            if (Value.Type.StartsWith("secure"))
+
+            await writer.WriteFunctionLineIfValueSet("description", Value.Metadata?.Description);
+
+            if (Value.ParsedType.Secure)
             {
                 await writer.WriteLineAsync("@secure()");
             }
-            if (Value.AllowedValues is string[] allowedValues && allowedValues.Any())
-            {
-                await writer.WriteLineAsync($"@allowed([{string.Join(
-                        ", ",
-                        allowedValues.Select(allowedValue => $"'{allowedValue}'")
-                    )}])");
-            }
+
+            await writer.WriteFunctionLineIfValueSet("allowed", Value.AllowedValues);
+
+            await writer.WriteFunctionLineIfValueSet("minValue", Value.MinValue);
+
+            await writer.WriteFunctionLineIfValueSet("maxValue", Value.MaxValue);
+
+            await writer.WriteFunctionLineIfValueSet("minLength", Value.MinLength);
+
+            await writer.WriteFunctionLineIfValueSet("maxLength", Value.MaxLength);
+
             await writer.WriteLineAsync(
-                $"param {Key} {(Value.Type switch { "secureString" => "string", _ => Value.Type })}"
+                $"param {Key} {Value.ParsedType.Type}"
                 );
+
+            await writer.WriteLineAsync();
         }
 
         await writer.WriteLineAsync(
@@ -204,5 +267,42 @@ public static  class TextWriterMarkdownExtensions
                     """
                 )
             );
+    }
+
+    private static async Task WriteFunctionLineIfValueSet(
+       this TextWriter writer,
+       string functionName,
+       object? value
+       )
+    {
+        string functionValue;
+        switch (value)
+        {
+            case int intValue:
+                functionValue = intValue.ToString(CultureInfo.InvariantCulture);
+                break;
+            case string stringValue:
+                functionValue = $"'{stringValue}'";
+                break;
+            case bool boolValue:
+                functionValue = boolValue ? "true" : "false";
+                break;
+
+            case string[] { Length:>0 } stringValues:
+                functionValue =
+                        $$"""
+                        [
+                            {{string.Join(
+                                $"{Environment.NewLine}  ",
+                                stringValues.Select(stringValue => $"'{stringValue}'")
+                                )}}
+                        ]
+                        """;
+                break;
+            default:
+                return;
+        }
+
+        await writer.WriteLineAsync($"@{functionName}({functionValue})");
     }
 }

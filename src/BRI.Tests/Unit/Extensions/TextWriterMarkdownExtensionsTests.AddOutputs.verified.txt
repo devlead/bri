@@ -3,7 +3,8 @@
 
 | Name                                | Type                                                    | Description                                                                                     |
 |-------------------------------------|---------------------------------------------------------|-------------------------------------------------------------------------------------------------|
-| `uniqueName`                        | `string`                                                | `Unique name of animal`                                                                         |
+| `uniqueName`                        | `string`                                                | Unique name of animal                                                                           |
 | `animal`                            | `object`                                                |                                                                                                 |
-| `eatsFruit`                         | `bool`                                                  | `Flag if animal eats fruit.`                                                                    |
+| `eatsFruit`                         | `bool`                                                  | Flag if animal eats fruit.                                                                      |
 | `parent`                            | `string`                                                |                                                                                                 |
+| `base64Encoded`                     | `string`                                                |                                                                                                 |

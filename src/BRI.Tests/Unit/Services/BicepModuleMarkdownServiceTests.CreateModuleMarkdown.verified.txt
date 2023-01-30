@@ -27,7 +27,7 @@
                       Path: /home/docs/bri.azurecr.io/bicep/modules/bri/2.0.0.0.md,
                       Exists: true,
                       Hidden: false,
-                      Length: 5830
+                      Length: 5788
                     }
                   ]
                 }

@@ -1,7 +1,12 @@
-﻿namespace BRI.Extensions;
+﻿using System.Text.RegularExpressions;
 
-public static class JsonElementExtensions
+namespace BRI.Extensions;
+
+public static partial class JsonElementExtensions
 {
+    [GeneratedRegex("parameters\\('(?<value>[\\s\\S]*?)'\\)", RegexOptions.NonBacktracking | RegexOptions.ExplicitCapture | RegexOptions.CultureInvariant)]
+    private static partial Regex ParametersRegex();
+
     public static string ToBicep(this JsonElement element, int level = 0)
         => element switch
         {
@@ -27,7 +32,10 @@ public static class JsonElementExtensions
         var elementValue = element.GetString();
         return elementValue switch
         {
-            string { Length: > 2 } value when value[0] == '[' && value[^1] == ']' => value[1..^1],
+            string { Length: > 2 } value when value[0] == '[' && value[^1] == ']' => ParametersRegex().Replace(
+            value[1..^1],
+            m => m.Groups["value"].Value
+            ),
             _ => $"'{elementValue?.Trim('"')}'"
         };
     }

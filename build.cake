@@ -32,12 +32,18 @@ Setup(
         var artifactsPath = context
                             .MakeAbsolute(context.Directory("./artifacts"));
 
+        var projectRoot =  context
+                            .MakeAbsolute(context.Directory("./src"));
+
+        var projectPath = projectRoot.CombineWithFilePath("BRI/BRI.csproj");
+
         return new BuildData(
             version,
             isMainBranch,
             !context.IsRunningOnWindows(),
             context.BuildSystem().IsLocalBuild,
-            "src",
+            projectRoot,
+            projectPath,
             new DotNetMSBuildSettings()
                 .SetConfiguration("Release")
                 .SetVersion(version)
@@ -120,7 +126,7 @@ Task("Clean")
 .Then("Pack")
     .Does<BuildData>(
         static (context, data) => context.DotNetPack(
-            data.ProjectRoot.FullPath,
+            data.ProjectPath.FullPath,
             new DotNetPackSettings {
                 NoBuild = true,
                 NoRestore = true,

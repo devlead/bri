@@ -10,6 +10,7 @@ public record BuildData(
     bool ShouldNotPublish,
     bool IsLocalBuild,
     DirectoryPath ProjectRoot,
+    FilePath ProjectPath,
     DotNetMSBuildSettings MSBuildSettings,
     DirectoryPath ArtifactsPath,
     DirectoryPath OutputPath

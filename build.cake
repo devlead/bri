@@ -210,7 +210,7 @@ Task("Clean")
     .WithCriteria<BuildData>((context, data) => data.ShouldRunIntegrationTests(), "ShouldRunIntegrationTests")
     .Does<BuildData>(static (context, data) => {
         context.DotNetRun(
-            "../../src/BRI.TestWeb",
+            context.MakeAbsolute(DirectoryPath.FromString("./src/BRI.TestWeb")).FullPath,
             new DotNetRunSettings {
                 NoBuild = true,
                 NoRestore = true,

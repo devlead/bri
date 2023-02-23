@@ -59,6 +59,8 @@ public sealed class Index : Content
 
     private static Task<IDocument> TreePlaceholderFactory(object[] path, IMetadata metadata, IExecutionContext context)
     {
+        NormalizedPath linkRoot = context.Settings.GetPath(Keys.LinkRoot, "/");
+
         var indexPath = new NormalizedPath(string.Join("/", path.Concat(new[] { "index.html" })));
         var inputPath = context.FileSystem
             .RootPath.Combine(context.FileSystem.InputPaths[0])
@@ -81,7 +83,12 @@ public sealed class Index : Content
         {
             var name = child.GetString(Keys.Title, child.Destination.Parent.Name);
 #pragma warning disable SYSLIB0013
-            var link = $"/{Uri.EscapeUriString(child.Destination.FullPath ?? string.Empty)}";
+            var link = string.Concat(
+                linkRoot.IsNullOrEmpty ? string.Empty : "/",
+                Uri.EscapeUriString(linkRoot.FullPath ?? string.Empty),
+                "/",
+                Uri.EscapeUriString(child.Destination.FullPath ?? string.Empty)
+                );
 #pragma warning restore SYSLIB0013
             var summary = child.GetString("Summary", child.GetString("Description"));
             builder.AppendLine($"| [{name}]({link}) | {summary} |");

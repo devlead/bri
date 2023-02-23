@@ -210,8 +210,9 @@ Task("Clean")
     .WithCriteria<BuildData>((context, data) => data.ShouldRunIntegrationTests(), "ShouldRunIntegrationTests")
     .Does<BuildData>(static (context, data) => {
         context.DotNetRun(
-            context.MakeAbsolute(DirectoryPath.FromString("./src/BRI.TestWeb")).FullPath,
+            data.ProjectRoot.CombineWithFilePath("BRI.TestWeb/BRI.TestWeb.csproj").FullPath,
             new DotNetRunSettings {
+                Configuration = "Release",
                 NoBuild = true,
                 NoRestore = true,
                 WorkingDirectory = data.StatiqWebPath,

@@ -1,4 +1,3 @@
-#tool dotnet:?package=GitVersion.Tool&version=5.11.1
 #load "build/records.cake"
 #load "build/helpers.cake"
 
@@ -200,6 +199,23 @@ Task("Clean")
          }
     )
 .Then("Integration-Tests")
+.Then("Generate-Statiq-Web")
+    .WithCriteria<BuildData>((context, data) => data.ShouldRunIntegrationTests(), "ShouldRunIntegrationTests")
+    .Does<BuildData>(static (context, data) => {
+        context.DotNetRun(
+            "../../src/BRI.TestWeb",
+            new DotNetRunSettings {
+                NoBuild = true,
+                NoRestore = true,
+                WorkingDirectory = data.StatiqWebPath,
+                ArgumentCustomization = args => args
+                                                    .Append("--")
+                                                    .AppendSwitchQuoted("--root", data.StatiqWebPath.FullPath)
+                                                    .AppendSwitchQuoted("--input", data.IntegrationTestPath.FullPath)
+                                                    .AppendSwitchQuoted("--output", data.StatiqWebOutputPath.FullPath)
+            }
+        );
+    })
     .Default()
 .Then("Push-GitHub-Packages")
     .WithCriteria<BuildData>( (context, data) => data.ShouldPushGitHubPackages())

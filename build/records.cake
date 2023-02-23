@@ -15,10 +15,14 @@ public record BuildData(
     DirectoryPath OutputPath
     )
 {
-    private const string IntegrationTest = "integrationtest";
+    private const string    IntegrationTest = "integrationtest",
+                            Web = "web",
+                            Output = "output";
     public DirectoryPath NuGetOutputPath { get; } = OutputPath.Combine("nuget");
     public DirectoryPath BinaryOutputPath { get; } = OutputPath.Combine("bin");
     public DirectoryPath IntegrationTestPath { get; } = OutputPath.Combine(IntegrationTest);
+    public DirectoryPath StatiqWebPath { get; } = ArtifactsPath.Combine(Web);
+    public DirectoryPath StatiqWebOutputPath { get; } = ArtifactsPath.Combine(Web).Combine(Output);
 
     public string GitHubNuGetSource { get; } = System.Environment.GetEnvironmentVariable("GH_PACKAGES_NUGET_SOURCE");
     public string GitHubNuGetApiKey { get; } = System.Environment.GetEnvironmentVariable("GITHUB_TOKEN");
@@ -36,6 +40,8 @@ public record BuildData(
 
     public ICollection<DirectoryPath> DirectoryPathsToClean = new []{
         ArtifactsPath,
+        ArtifactsPath.Combine(Web),
+        ArtifactsPath.Combine(Web).Combine(Output),
         OutputPath,
         OutputPath.Combine(IntegrationTest)
     };

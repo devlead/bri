@@ -1,8 +1,4 @@
-﻿using Microsoft.Extensions.Primitives;
-using Newtonsoft.Json.Linq;
-using System.Runtime.CompilerServices;
-
-namespace BRI.Extensions;
+﻿namespace BRI.Extensions;
 
 public static  class TextWriterMarkdownExtensions
 {

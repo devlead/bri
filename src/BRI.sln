@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BRI", "BRI\BRI.csproj", "{4
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BRI.Tests", "BRI.Tests\BRI.Tests.csproj", "{2483AD23-45B2-4D3A-AECE-B07B36E9688C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRI.TestWeb", "BRI.TestWeb\BRI.TestWeb.csproj", "{BF2D549C-3278-46BB-A943-40E4BCB1DDD0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{2483AD23-45B2-4D3A-AECE-B07B36E9688C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2483AD23-45B2-4D3A-AECE-B07B36E9688C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2483AD23-45B2-4D3A-AECE-B07B36E9688C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF2D549C-3278-46BB-A943-40E4BCB1DDD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF2D549C-3278-46BB-A943-40E4BCB1DDD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF2D549C-3278-46BB-A943-40E4BCB1DDD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF2D549C-3278-46BB-A943-40E4BCB1DDD0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

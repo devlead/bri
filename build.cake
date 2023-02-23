@@ -1,4 +1,4 @@
-#tool dotnet:?package=GitVersion.Tool&version=5.11.1
+#tool dotnet:?package=GitVersion.Tool&version=5.12.0
 #load "build/records.cake"
 #load "build/helpers.cake"
 
@@ -32,12 +32,18 @@ Setup(
         var artifactsPath = context
                             .MakeAbsolute(context.Directory("./artifacts"));
 
+        var projectRoot =  context
+                            .MakeAbsolute(context.Directory("./src"));
+
+        var projectPath = projectRoot.CombineWithFilePath("BRI/BRI.csproj");
+
         return new BuildData(
             version,
             isMainBranch,
             !context.IsRunningOnWindows(),
             context.BuildSystem().IsLocalBuild,
-            "src",
+            projectRoot,
+            projectPath,
             new DotNetMSBuildSettings()
                 .SetConfiguration("Release")
                 .SetVersion(version)
@@ -120,7 +126,7 @@ Task("Clean")
 .Then("Pack")
     .Does<BuildData>(
         static (context, data) => context.DotNetPack(
-            data.ProjectRoot.FullPath,
+            data.ProjectPath.FullPath,
             new DotNetPackSettings {
                 NoBuild = true,
                 NoRestore = true,
@@ -200,6 +206,24 @@ Task("Clean")
          }
     )
 .Then("Integration-Tests")
+.Then("Generate-Statiq-Web")
+    .WithCriteria<BuildData>((context, data) => data.ShouldRunIntegrationTests(), "ShouldRunIntegrationTests")
+    .Does<BuildData>(static (context, data) => {
+        context.DotNetRun(
+            data.ProjectRoot.CombineWithFilePath("BRI.TestWeb/BRI.TestWeb.csproj").FullPath,
+            new DotNetRunSettings {
+                Configuration = "Release",
+                NoBuild = true,
+                NoRestore = true,
+                WorkingDirectory = data.StatiqWebPath,
+                ArgumentCustomization = args => args
+                                                    .Append("--")
+                                                    .AppendSwitchQuoted("--root", data.StatiqWebPath.FullPath)
+                                                    .AppendSwitchQuoted("--input", data.IntegrationTestPath.FullPath)
+                                                    .AppendSwitchQuoted("--output", data.StatiqWebOutputPath.FullPath)
+            }
+        );
+    })
     .Default()
 .Then("Push-GitHub-Packages")
     .WithCriteria<BuildData>( (context, data) => data.ShouldPushGitHubPackages())

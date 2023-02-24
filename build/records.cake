@@ -24,6 +24,7 @@ public record BuildData(
     public DirectoryPath IntegrationTestPath { get; } = OutputPath.Combine(IntegrationTest);
     public DirectoryPath StatiqWebPath { get; } = ArtifactsPath.Combine(Web);
     public DirectoryPath StatiqWebOutputPath { get; } = ArtifactsPath.Combine(Web).Combine(Output);
+    public FilePath GitHubPagesArtifactPath { get; } = OutputPath.CombineWithFilePath("artifact.tar");
 
     public string GitHubNuGetSource { get; } = System.Environment.GetEnvironmentVariable("GH_PACKAGES_NUGET_SOURCE");
     public string GitHubNuGetApiKey { get; } = System.Environment.GetEnvironmentVariable("GITHUB_TOKEN");

@@ -5,6 +5,23 @@
       DefaultValue: {
         ValueKind: Number
       },
+      AllowedValues: [
+        {
+          ValueKind: Number
+        },
+        {
+          ValueKind: Number
+        },
+        {
+          ValueKind: Number
+        },
+        {
+          ValueKind: Number
+        },
+        {
+          ValueKind: Number
+        }
+      ],
       Metadata: {
         Description: Age of animal
       },
@@ -52,7 +69,7 @@
       }
     },
     name: {
-      Type: secureString,
+      Type: securestring,
       Metadata: {
         Description: Name of animal
       },
@@ -69,8 +86,12 @@
         ValueKind: String
       },
       AllowedValues: [
-        Adam,
-        Eve
+        {
+          ValueKind: String
+        },
+        {
+          ValueKind: String
+        }
       ],
       ParsedType: {
         Secure: false,
@@ -119,8 +140,8 @@
   Metadata: {
     Generator: {
       Name: bicep,
-      Version: 0.13.1.58284,
-      TemplateHash: 9883379998541991298
+      Version: 0.14.85.62628,
+      TemplateHash: 17627075288540549495
     },
     Documentation: {
       Summary: A brief summary of the module.,

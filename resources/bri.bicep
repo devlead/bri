@@ -32,6 +32,13 @@ param alive bool = true
 @description('Age of animal')
 @minValue(1)
 @maxValue(99)
+@allowed([
+  1
+  3
+  25
+  50
+  99
+])
 param age int = 3
 
 param animal object = {

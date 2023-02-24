@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.13.1.58284",
-      "templateHash": "9883379998541991298"
+      "version": "0.14.85.62628",
+      "templateHash": "17627075288540549495"
     },
     "documentation": {
       "summary": "A brief summary of the module.",
@@ -14,7 +14,7 @@
   },
   "parameters": {
     "name": {
-      "type": "secureString",
+      "type": "securestring",
       "metadata": {
         "example": "Pogo",
         "description": "Name of animal"
@@ -50,6 +50,13 @@
     "age": {
       "type": "int",
       "defaultValue": 3,
+      "allowedValues": [
+        1,
+        3,
+        25,
+        50,
+        99
+      ],
       "maxValue": 99,
       "minValue": 1,
       "metadata": {

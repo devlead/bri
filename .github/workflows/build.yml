@@ -45,16 +45,6 @@ jobs:
           cake-version: tool-manifest
           target: GitHub-Actions
 
-      - name: Setup Pages
-        if: runner.os == 'Linux' && github.ref == 'refs/heads/main'
-        uses: actions/configure-pages@v3
-
-      - name: Upload pages artifact
-        if: runner.os == 'Linux' && github.ref == 'refs/heads/main'
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: './artifacts/web/output'
-
   deploy:
     if: github.ref == 'refs/heads/main'
     environment:
@@ -66,6 +56,9 @@ jobs:
       pages: write
       id-token: write
     steps:
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1

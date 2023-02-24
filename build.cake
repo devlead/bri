@@ -224,7 +224,24 @@ Task("Clean")
             }
         );
     })
+.Then("Package-Statiq-Web-For-GitHubPages")
+    .WithCriteria<BuildData>((context, data) => data.ShouldRunIntegrationTests(), "ShouldRunIntegrationTests")
+        .Does<BuildData>(
+            static (context, data) => System.Formats.Tar.TarFile.CreateFromDirectoryAsync(
+                data.StatiqWebOutputPath.FullPath,
+                data.GitHubPagesArtifactPath.FullPath,
+                false
+             ))
     .Default()
+.Then("Upload-GitHubPages-Artifact")
+    .WithCriteria<BuildData>((context, data) => data.ShouldRunIntegrationTests(), "ShouldRunIntegrationTests")
+    .WithCriteria(BuildSystem.IsRunningOnGitHubActions, nameof(BuildSystem.IsRunningOnGitHubActions))
+    .Does<BuildData>(
+        static (context, data) => context
+            .GitHubActions()
+            .Commands
+            .UploadArtifact(data.GitHubPagesArtifactPath, "github-pages")
+    )
 .Then("Push-GitHub-Packages")
     .WithCriteria<BuildData>( (context, data) => data.ShouldPushGitHubPackages())
     .DoesForEach<BuildData, FilePath>(

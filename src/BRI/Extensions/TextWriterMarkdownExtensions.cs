@@ -99,12 +99,12 @@ public static  class TextWriterMarkdownExtensions
         }
         typeBuilder.Append(value.ParsedType.Type.CodeLine());
 
-        if(value.AllowedValues is string[] values && values.Any())
+        if(value.AllowedValues is JsonElement[] values && values.Any())
         {
             typeBuilder.Append("<br>");
             typeBuilder.Append(string.Join(
                         ",<br>",
-                        values.Select(value => $"'{value}'")
+                        values.Select(value => value.ToBicep())
                     ).PreLine());
         }
 

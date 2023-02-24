@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-
-namespace BRI.Models.Acr.Repository.Module;
+﻿namespace BRI.Models.Acr.Repository.Module;
 
 public record Parameter(
         [property: JsonPropertyName("type")]
@@ -8,7 +6,7 @@ public record Parameter(
         [property: JsonPropertyName("defaultValue")]
         JsonElement? DefaultValue,
         [property: JsonPropertyName("allowedValues")]
-        string[] AllowedValues,
+        JsonElement[] AllowedValues,
         [property: JsonPropertyName("metadata")]
         Metadata Metadata,
         [property: JsonPropertyName("maxValue")]
@@ -23,6 +21,8 @@ int? MinLength
 {
     public ParsedArmType ParsedType { get; } = Type switch
     {
+        "securestring" => new(true, "string"),
+        "secureobject" => new(true, "object"),
         "secureString" => new(true, "string"),
         "secureObject" => new(true, "object"),
         _ => new(false, Type)

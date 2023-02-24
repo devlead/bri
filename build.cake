@@ -40,7 +40,7 @@ Setup(
         return new BuildData(
             version,
             isMainBranch,
-            !context.IsRunningOnWindows(),
+            !context.IsRunningOnLinux(),
             context.BuildSystem().IsLocalBuild,
             projectRoot,
             projectPath,

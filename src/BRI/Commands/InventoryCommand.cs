@@ -25,39 +25,44 @@ public class InventoryCommand : AsyncCommand<InventorySettings>
         Logger.LogInformation("Getting repositories...");
         var repos = await CatalogService.GetRepositories(settings.AcrLoginServer);
         Logger.LogInformation("Found {RepoCount}", repos.Count);
-
-        foreach(var repo in repos)
-        {
-            Logger.LogInformation("Getting tags for {Repo}...", repo);
-            var tags = await RepositoryService.Tag.GetTags(
-                            settings.AcrLoginServer,
-                            repo,
-                            settings.TagLimitNumber
-                        );
-            Logger.LogInformation("Found {TagCount} tags for {Repo}.", tags.Count, repo);
-
-            foreach(var tag in tags)
+        await Parallel.ForEachAsync(
+            repos,
+            async (repo, ct) =>
             {
-                Logger.LogInformation("Getting manifest bicep layers for {Repo} tag {Tag}...", repo, tag.Name);
-                var layers = await RepositoryService.Manifest.GetManifestLayers(
-                                    settings.AcrLoginServer,
-                                    repo,
-                                    tag.Digest
-                                );
-                Logger.LogInformation("Found {LayerCount} manifest bicep layers for {Repo} tag {Tag}.", layers.Count, repo, tag.Name);
+                Logger.LogInformation("Getting tags for {Repo}...", repo);
+                var tags = await RepositoryService.Tag.GetTags(
+                                settings.AcrLoginServer,
+                                repo,
+                                settings.TagLimitNumber
+                            );
+                Logger.LogInformation("Found {TagCount} tags for {Repo}.", tags.Count, repo);
 
-                foreach(var layer in layers)
-                {
-                    var module = await RepositoryService.Blob.GetModule(
-                                        settings.AcrLoginServer,
-                                        repo,
-                                        layer.Digest
-                                    );
+                await Parallel.ForEachAsync(
+                    tags,
+                    async (tag, ct) =>
+                    {
+                        Logger.LogInformation("Getting manifest bicep layers for {Repo} tag {Tag}...", repo, tag.Name);
+                        var layers = await RepositoryService.Manifest.GetManifestLayers(
+                                            settings.AcrLoginServer,
+                                            repo,
+                                            tag.Digest
+                                        );
+                        Logger.LogInformation("Found {LayerCount} manifest bicep layers for {Repo} tag {Tag}.", layers.Count, repo, tag.Name);
 
-                    await BicepModuleMarkdownService.CreateModuleMarkdown(settings.AcrLoginServer, targetPath, repo, tag, module);
-                }
+                        foreach (var layer in layers)
+                        {
+                            var module = await RepositoryService.Blob.GetModule(
+                                                settings.AcrLoginServer,
+                                                repo,
+                                                layer.Digest
+                                            );
+
+                            await BicepModuleMarkdownService.CreateModuleMarkdown(settings.AcrLoginServer, targetPath, repo, tag, module);
+                        }
+                    }
+                );
             }
-        }
+        );
 
         sw.Stop();
         Logger.LogInformation("Processed {RepoCount} in {Elapsed}", repos.Count, sw.Elapsed);

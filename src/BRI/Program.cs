@@ -1,12 +1,7 @@
 ﻿using BRI.Commands;
-using BRI.Services;
 using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Spectre.Console.Cli.Extensions.DependencyInjection;
-using Spectre.Console.Cli;
-using BRI.Services.Acr;
-using BRI.Services.Acr.Repository;
 using Azure.Core;
 using Azure.Identity;
 

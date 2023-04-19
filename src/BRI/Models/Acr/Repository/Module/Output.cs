@@ -4,7 +4,7 @@ public record Output(
         [property: JsonPropertyName("type")]
         string Type,
         [property: JsonPropertyName("value")]
-        string Value,
+        JsonElement Value,
         [property: JsonPropertyName("metadata")]
         Metadata Metadata
     );

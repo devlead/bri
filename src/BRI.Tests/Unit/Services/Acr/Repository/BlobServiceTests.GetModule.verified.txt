@@ -112,26 +112,36 @@
   Outputs: {
     animal: {
       Type: object,
-      Value: [parameters('animal')]
+      Value: {
+        ValueKind: String
+      }
     },
     base64Encoded: {
       Type: string,
-      Value: [variables('base64Encoded')]
+      Value: {
+        ValueKind: String
+      }
     },
     eatsFruit: {
       Type: bool,
-      Value: [variables('eatsFruit')],
+      Value: {
+        ValueKind: String
+      },
       Metadata: {
         Description: Flag if animal eats fruit.
       }
     },
     parent: {
       Type: string,
-      Value: [parameters('parent')]
+      Value: {
+        ValueKind: String
+      }
     },
     uniqueName: {
       Type: string,
-      Value: [variables('uniqueName')],
+      Value: {
+        ValueKind: String
+      },
       Metadata: {
         Description: Unique name of animal
       }

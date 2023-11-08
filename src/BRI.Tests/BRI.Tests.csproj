@@ -42,7 +42,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Verify.NUnit" Version="22.1.4" />
-    <PackageReference Include="Verify.Http" Version="4.2.1" />
+    <PackageReference Include="Verify.Http" Version="4.3.2" />
     <PackageReference Include="Cake.Testing" Version="3.1.0" />
     <PackageReference Include="NSubstitute" Version="5.1.0" />
   </ItemGroup>

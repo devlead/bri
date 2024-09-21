@@ -13,6 +13,7 @@ public class InventoryCommandTests
     {
         // Given
         var context = new CommandContext(
+            Array.Empty<string>(),
             Substitute.For<IRemainingArguments>(),
             nameof(InventoryCommand),
             null

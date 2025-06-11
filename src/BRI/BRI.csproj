@@ -40,7 +40,7 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.6" />
     <PackageReference Include="Cake.Bridge.DependencyInjection" Version="2025.6.11.161" />
     <PackageReference Include="Cake.Common" Version="5.0.0" />
-    <PackageReference Include="Devlead.Console" Version="2025.6.11.215" />
+    <PackageReference Include="Devlead.Console" Version="2025.6.11.218" />
   </ItemGroup>
 
   <ItemGroup>

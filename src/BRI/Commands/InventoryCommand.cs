@@ -10,7 +10,7 @@ public class InventoryCommand : AsyncCommand<InventorySettings>
     private RepositoryService RepositoryService { get; }
     private BicepModuleMarkdownService BicepModuleMarkdownService { get; }
 
-    public override async Task<int> ExecuteAsync(CommandContext context, InventorySettings settings)
+    public override async Task<int> ExecuteAsync(CommandContext context, InventorySettings settings, CancellationToken cancellationToken)
     {
         var sw = System.Diagnostics.Stopwatch.StartNew();
         Logger.LogInformation("AcrLoginServer: {AcrLoginServer}", settings.AcrLoginServer);

@@ -49,9 +49,9 @@ public class InventoryCommand : AsyncCommand<InventorySettings>
                                         );
                         Logger.LogInformation("Found {LayerCount} manifest bicep layers for {Repo} tag {Tag}.", layers.Count, repo, tag.Name);
 
-                        foreach (var layer in layers)
+                        foreach (var layer in   layers)
                         {
-                            var module = await RepositoryService.Blob.GetModule(
+                             var module = await RepositoryService.Blob.GetModule(
                                                 settings.AcrLoginServer,
                                                 repo,
                                                 layer.Digest

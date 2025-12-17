@@ -159,11 +159,18 @@ public record TokenService(
 
     private static async Task<T> GetFromJsonAsync<T>(HttpClient httpClient, string url)
     {
-        var result = await httpClient.GetFromJsonAsync<T>(url);
+        try
+        {
+            var result = await httpClient.GetFromJsonAsync<T>(url);
 
-        ArgumentNullException.ThrowIfNull(result);
+            ArgumentNullException.ThrowIfNull(result);
 
-        return result;
+            return result;
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Failed to GET from {url}", ex);
+        }
     }
 
     private HttpClient GetBearerTokenHttpClient(

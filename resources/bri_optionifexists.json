@@ -1,0 +1,136 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "languageVersion": "2.0",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.14.85.62628",
+      "templateHash": "17627075288540549495"
+    },
+    "documentation": {
+      "summary": "A brief summary of the module.",
+      "description": "A detailed description of the bicep module.\r\nUsed for the overview in documentation.\r\n"
+    }
+  },
+  "parameters": {
+    "name": {
+      "type": "securestring",
+      "metadata": {
+        "example": "Pogo",
+        "description": "Name of animal"
+      },
+      "maxLength": 20,
+      "minLength": 1
+    },
+    "parent": {
+      "type": "string",
+      "defaultValue": "Eve",
+      "allowedValues": [
+        "Adam",
+        "Eve"
+      ]
+    },
+    "fruit": {
+      "type": "array",
+      "defaultValue": [
+        "Banana",
+        "Apple"
+      ],
+      "metadata": {
+        "description": "Possible fruits."
+      }
+    },
+    "alive": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Indicates if animal is alive"
+      }
+    },
+    "age": {
+      "type": "int",
+      "defaultValue": 3,
+      "allowedValues": [
+        1,
+        3,
+        25,
+        50,
+        99
+      ],
+      "maxValue": 99,
+      "minValue": 1,
+      "metadata": {
+        "description": "Age of animal"
+      }
+    },
+    "animal": {
+      "type": "object",
+      "defaultValue": {
+        "name": "[parameters('name')]",
+        "age": "[parameters('age')]",
+        "species": "Ape",
+        "eats": "Banana",
+        "alive": "[parameters('alive')]"
+      }
+    },
+    "topSecret": {
+      "type": "secureObject",
+      "metadata": {
+        "description": "Very secret object"
+      }
+    }
+  },
+  "variables": {
+    "eatsFruit": "[contains(parameters('fruit'), parameters('animal').eats)]",
+    "uniqueName": "[uniqueString(parameters('name'))]",
+    "base64Encoded": "[reduce(items(parameters('topSecret')), '', lambda('result', 'item', format('{0}\r\n{1}:{2}', lambdaVariables('result'), lambdaVariables('item').key, base64(lambdaVariables('item').value))))]"
+  },
+  "resources": {
+    "ApplicationGatewayWebApplicationFirewallPolicies": {
+      "@options": {
+        "onlyIfNotExists": []
+      },
+      "type": "Microsoft.Network/ApplicationGatewayWebApplicationFirewallPolicies",
+      "apiVersion": "2024-07-01",
+      "name": "[parameters('wafName')]",
+      "location": "[parameters('location')]",
+      "tags": "[parameters('tags')]",
+      "properties": {
+        "policySettings": "[parameters('policySettings')]",
+        "managedRules": {
+          "managedRuleSets": "[parameters('managedRuleSets')]",
+          "exclusions": "[parameters('exclusions')]"
+        }
+      }
+    }
+  },
+  "outputs": {
+    "uniqueName": {
+      "type": "string",
+      "value": "[variables('uniqueName')]",
+      "metadata": {
+        "description": "Unique name of animal"
+      }
+    },
+    "animal": {
+      "type": "object",
+      "value": "[parameters('animal')]"
+    },
+    "eatsFruit": {
+      "type": "bool",
+      "value": "[variables('eatsFruit')]",
+      "metadata": {
+        "description": "Flag if animal eats fruit."
+      }
+    },
+    "parent": {
+      "type": "string",
+      "value": "[parameters('parent')]"
+    },
+    "base64Encoded": {
+      "type": "string",
+      "value": "[variables('base64Encoded')]"
+    }
+  }
+}

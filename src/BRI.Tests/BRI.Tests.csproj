@@ -27,6 +27,7 @@
     <Folder Include="Resources\" />
     <EmbeddedResource Include="..\..\resources\bri.json" Link="Resources\bri.json" />
     <EmbeddedResource Include="..\..\resources\bri.bicep" Link="Resources\bri.bicep" />
+    <EmbeddedResource Include="..\..\resources\bri_optionifexists.json" Link="Resources\bri_optionifexists.json" />
   </ItemGroup>
 
   <ItemGroup>

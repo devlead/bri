@@ -22,7 +22,7 @@ public record BicepModuleMarkdownService(ICakeContext CakeContext)
 
         using var writer = new StreamWriter(
             stream,
-            System.Text.Encoding.UTF8
+            Encoding.UTF8
             );
 
         await writer.AddFrontmatter(tag, moduleName, module.Metadata?.Documentation?.Summary);

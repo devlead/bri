@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="BRI.Tests/BRI.Tests.csproj" />
+  <Project Path="BRI.TestWeb/BRI.TestWeb.csproj" />
+  <Project Path="BRI/BRI.csproj" />
+</Solution>

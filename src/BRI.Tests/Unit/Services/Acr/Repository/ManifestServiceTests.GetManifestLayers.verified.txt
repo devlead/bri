@@ -3,5 +3,10 @@
     MediaType: application/vnd.ms.bicep.module.layer.v1+json,
     Digest: sha256:91d9146823b1bbca091af39418cce0b98e7b031e63039666362d147b80f8ef52,
     Size: 2389
+  },
+  {
+    MediaType: application/vnd.ms.bicep.module.layer.v1+json,
+    Digest: sha256:ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad,
+    Size: 3001
   }
 ]

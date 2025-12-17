@@ -24,7 +24,8 @@ public static class Constants
         {
             public const string
                 Tag = "sha256:b5bd971dc2dacc73937e5b9cb731e02c857845aa00b7a8124ee0afdd24fd621e",
-                Blob = "sha256:91d9146823b1bbca091af39418cce0b98e7b031e63039666362d147b80f8ef52";
+                Blob = "sha256:91d9146823b1bbca091af39418cce0b98e7b031e63039666362d147b80f8ef52",
+                BlobOptionIfExists = "sha256:ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad";
 
         }
 
@@ -43,7 +44,8 @@ public static class Constants
                     Catalog = $"https://{ContainerService}/acr/v1/_catalog",
                     Tag = $"https://{ContainerService}/acr/v1/{Repo}/_tags?orderby=timedesc&n=1",
                     Manifest = $"https://{ContainerService}/v2/{Repo}/manifests/{Digest.Tag}",
-                    Blob = $"https://{ContainerService}/v2/{Repo}/blobs/{Digest.Blob}";
+                    Blob = $"https://{ContainerService}/v2/{Repo}/blobs/{Digest.Blob}",
+                    BlobOptionIfExists = $"https://{ContainerService}/v2/{Repo}/blobs/{Digest.BlobOptionIfExists}";
             }
         }
 
@@ -86,6 +88,12 @@ public static class Constants
                                     "digest": "sha256:91d9146823b1bbca091af39418cce0b98e7b031e63039666362d147b80f8ef52",
                                     "size": 2389,
                                     "annotations": {}
+                                },
+                                {
+                                    "mediaType": "application/vnd.ms.bicep.module.layer.v1+json",
+                                    "digest": "sha256:ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
+                                    "size": 3001,
+                                    "annotations": {}
                                 }
                                 ]
                             }
@@ -120,6 +128,7 @@ public static class Constants
                                 }
                                 """;
                     public static string Module { get; } = GetResourceString("bri.json");
+                    public static string ModuleOptionIfExists { get; } = GetResourceString("bri_optionifexists.json");
                 }
             }
         }

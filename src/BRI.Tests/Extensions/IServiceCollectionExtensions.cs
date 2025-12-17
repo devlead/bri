@@ -92,10 +92,16 @@ public static class IServiceCollectionExtensions
                                 )
             };
 
-        static HttpResponseMessage GetMockRepoBlobResponse()
+        static HttpResponseMessage GetMockRepoBlobResponse(bool optionIfExists)
         => new()
         {
-            Content = new StringContent(
+            Content = (optionIfExists)
+            ? new StringContent(
+                                    Constants.ACR.Response.Json.Repo.ModuleOptionIfExists,
+                                    Encoding.UTF8,
+                                    Constants.MediaType.BicepModuleLayer
+                                )
+            : new StringContent(
                                     Constants.ACR.Response.Json.Repo.Module,
                                     Encoding.UTF8,
                                     Constants.MediaType.BicepModuleLayer
@@ -134,7 +140,12 @@ public static class IServiceCollectionExtensions
                         {
                             Method.Method: Constants.Request.Method.Get,
                             RequestUri.AbsoluteUri: Constants.ACR.Request.Uri.Blob
-                        } => GetMockRepoBlobResponse(),
+                        } => GetMockRepoBlobResponse(false),
+
+                        {
+                            Method.Method: Constants.Request.Method.Get,
+                            RequestUri.AbsoluteUri: Constants.ACR.Request.Uri.BlobOptionIfExists
+                        } => GetMockRepoBlobResponse(true),
 
                         _ => new HttpResponseMessage
                         {

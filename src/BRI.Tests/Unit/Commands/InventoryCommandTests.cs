@@ -2,6 +2,7 @@
 using BRI.Commands.Settings;
 using Cake.Core;
 using Spectre.Console.Cli;
+using System.Runtime;
 
 namespace BRI.Tests.Unit.Commands;
 
@@ -40,7 +41,7 @@ public class InventoryCommandTests
                                 .AddSingleton<InventoryCommand>()
             );
 
-        var command = new InventoryCommand(
+        ICommand<InventorySettings> command = new InventoryCommand(
             cakeContext,
             logger,
             catalogService,

@@ -1,0 +1,8 @@
+﻿[
+  {
+    Name: 2.0.0.0,
+    Digest: sha256:b5bd971dc2dacc73937e5b9cb731e02c857845aa00b7a8124ee0afdd24fd621e,
+    CreatedTime: DateTimeOffset_1,
+    LastUpdateTime: DateTimeOffset_1
+  }
+]

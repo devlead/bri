@@ -1,5 +1,7 @@
 # BRI
 
+[![NuGet](https://img.shields.io/nuget/v/BRI.svg)](https://www.nuget.org/packages/BRI)
+
 Bicep Registry Inventory .NET Tool - Inventories and documents Bicep modules in a Azure container registry.
 
 ## Installation

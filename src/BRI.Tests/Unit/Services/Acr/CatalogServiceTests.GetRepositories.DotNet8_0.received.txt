@@ -1,3 +1,0 @@
-﻿[
-  bicep/modules/bri
-]

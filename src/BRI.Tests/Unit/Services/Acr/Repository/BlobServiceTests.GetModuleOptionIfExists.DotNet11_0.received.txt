@@ -1,0 +1,214 @@
+﻿{
+  LanguageVersion: 2.0,
+  Parameters: {
+    age: {
+      Type: int,
+      DefaultValue: {
+        ValueKind: Number
+      },
+      AllowedValues: [
+        {
+          ValueKind: Number
+        },
+        {
+          ValueKind: Number
+        },
+        {
+          ValueKind: Number
+        },
+        {
+          ValueKind: Number
+        },
+        {
+          ValueKind: Number
+        }
+      ],
+      Metadata: {
+        Description: Age of animal
+      },
+      MaxValue: 99,
+      MinValue: 1,
+      ParsedType: {
+        Secure: false,
+        Type: int
+      }
+    },
+    alive: {
+      Type: bool,
+      DefaultValue: {
+        ValueKind: True
+      },
+      Metadata: {
+        Description: Indicates if animal is alive
+      },
+      ParsedType: {
+        Secure: false,
+        Type: bool
+      }
+    },
+    animal: {
+      Type: object,
+      DefaultValue: {
+        ValueKind: Object
+      },
+      ParsedType: {
+        Secure: false,
+        Type: object
+      }
+    },
+    fruit: {
+      Type: array,
+      DefaultValue: {
+        ValueKind: Array
+      },
+      Metadata: {
+        Description: Possible fruits.
+      },
+      ParsedType: {
+        Secure: false,
+        Type: array
+      }
+    },
+    name: {
+      Type: securestring,
+      Metadata: {
+        Description: Name of animal
+      },
+      MaxLength: 20,
+      MinLength: 1,
+      ParsedType: {
+        Secure: true,
+        Type: string
+      }
+    },
+    parent: {
+      Type: string,
+      DefaultValue: {
+        ValueKind: String
+      },
+      AllowedValues: [
+        {
+          ValueKind: String
+        },
+        {
+          ValueKind: String
+        }
+      ],
+      ParsedType: {
+        Secure: false,
+        Type: string
+      }
+    },
+    topSecret: {
+      Type: secureObject,
+      Metadata: {
+        Description: Very secret object
+      },
+      ParsedType: {
+        Secure: true,
+        Type: object
+      }
+    }
+  },
+  Outputs: {
+    animal: {
+      Type: object,
+      Value: {
+        ValueKind: String
+      }
+    },
+    base64Encoded: {
+      Type: string,
+      Value: {
+        ValueKind: String
+      }
+    },
+    eatsFruit: {
+      Type: bool,
+      Value: {
+        ValueKind: String
+      },
+      Metadata: {
+        Description: Flag if animal eats fruit.
+      }
+    },
+    parent: {
+      Type: string,
+      Value: {
+        ValueKind: String
+      }
+    },
+    uniqueName: {
+      Type: string,
+      Value: {
+        ValueKind: String
+      },
+      Metadata: {
+        Description: Unique name of animal
+      }
+    }
+  },
+  Resources: {
+    ApplicationGatewayWebApplicationFirewallPolicies: {
+      @options: {},
+      apiVersion: {
+        Options: {
+          PropertyNameCaseInsensitive: true
+        }
+      },
+      location: {
+        Options: {
+          PropertyNameCaseInsensitive: true
+        }
+      },
+      name: {
+        Options: {
+          PropertyNameCaseInsensitive: true
+        }
+      },
+      properties: {
+        managedRules: {
+          exclusions: {
+            Options: {
+              PropertyNameCaseInsensitive: true
+            }
+          },
+          managedRuleSets: {
+            Options: {
+              PropertyNameCaseInsensitive: true
+            }
+          }
+        },
+        policySettings: {
+          Options: {
+            PropertyNameCaseInsensitive: true
+          }
+        }
+      },
+      tags: {
+        Options: {
+          PropertyNameCaseInsensitive: true
+        }
+      },
+      type: {
+        Options: {
+          PropertyNameCaseInsensitive: true
+        }
+      }
+    }
+  },
+  Metadata: {
+    Generator: {
+      Name: bicep,
+      Version: 0.14.85.62628,
+      TemplateHash: 17627075288540549495
+    },
+    Documentation: {
+      Summary: A brief summary of the module.,
+      Description:
+A detailed description of the bicep module.
+Used for the overview in documentation.
+
+    }
+  }
+}

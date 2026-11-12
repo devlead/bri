@@ -351,3 +351,5 @@ MigrationBackup/
 [Aa]rtifacts/
 
 launchSettings.json
+# Verify received files
+*.received.*

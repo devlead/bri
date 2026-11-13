@@ -15,7 +15,7 @@
     <PackageReference Include="System.Security.Cryptography.Xml" Version="11.0.0" />
     <PackageReference Include="System.Drawing.Common" Version="11.0.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.9.1" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="7.1.1" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="7.1.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="System.DirectoryServices.Protocols" Version="11.0.0" />
     <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="3.0.3" />
